@@ -3,22 +3,6 @@
 #include "include/SingleIterator.h"
 #include "include/FileWriter.h"
 
-// http://stackoverflow.com/questions/478528/parsing-integer-to-string-c
-
-int parseInt(const char *s, int *i) {
-    char *ep;
-    long l;
-
-    l = strtol(s, &ep, 0);
-
-    if (*ep != 0) {
-        return 0;
-    }
-
-    *i = (int) l;
-    return 1;
-}
-
 void parse_args(int argc, char **argv) {
     if (argc == 1) {
         show_help(argv);
@@ -33,28 +17,33 @@ void parse_args(int argc, char **argv) {
             exit(1);
         }
 
-        if (opt == "-?") {
+        if (opt == "-?" || opt == "-?" || opt == "--help") {
             opts->help = true;
             return;
         }
 
-        if (opt == "-i") {
+        if (opt == "-i" || opt == "--interactive") {
             opts->interactive = true;
             return;
         }
 
-        if (opt == "-s") {
-            opts->stop = true;
+        if (opt == "-s" || opt == "--single") {
+            opts->single = true;
             continue;
         }
 
-        if (opt == "-v") {
+        if (opt == "-v" || opt == "--verbose") {
             opts->verbose = true;
             continue;
         }
 
-        if (opt == "-m") {
-            opts->minimal = true;
+        if (opt == "-q" || opt == "--quiet") {
+            opts->quiet = true;
+            continue;
+        }
+
+        if (opt == "--enter-info") {
+            opts->enter_info = true;
             continue;
         }
 
@@ -64,54 +53,54 @@ void parse_args(int argc, char **argv) {
             exit(1);
         }
 
-        if (opt == "-u") {
+        if (opt == "-u" || opt == "--user") {
             opts->users = new SingleIterator(argv[++i]);
             opts->user_source = USER_GIVEN;
             continue;
         }
 
-        if (opt == "-l") {
+        if (opt == "-l" || opt == "--user-list") {
             FILE *user_file = open_file(argv[++i]);
             opts->users = new FileIterator(user_file);
             opts->user_source = USER_FILE;
             continue;
         }
 
-        if (opt == "-p") {
+        if (opt == "-p" || opt == "--pass") {
             char* pass = argv[++i];
             opts->passwords = new SingleIterator(pass);
             opts->pass_source = PASS_GIVEN;
             continue;
         }
 
-        if (opt == "-w") {
+        if (opt == "-w" || opt == "--pass-list") {
             FILE *pass_file = open_file(argv[++i]);
             opts->passwords = new FileIterator(pass_file);
             opts->pass_source = PASS_FILE;
             continue;
         }
 
-        if (opt == "-d") {
+        if (opt == "-d" || opt == "--domain") {
             opts->domain = argv[++i];
             continue;
         }
 
-        if (opt == "-o") {
+        if (opt == "-o" || opt == "--output") {
             opts->write_out_file = true;
             opts->out_file = new FileWriter(argv[++i]);
             continue;
         }
 
-        if (opt == "-t") {
+        if (opt == "-t" || opt == "--max-tries") {
             opts->limit_tries = true;
-            if (!parseInt(argv[++i], &opts->max_tries)) {
+            if (!parse_int(argv[++i], &opts->max_tries)) {
                 outfln("Invalid number: %s", argv[i]);
                 exit(1);
             }
             continue;
         }
 
-        if (opt == "-f") {
+        if (opt == "-f" || opt == "--filter") {
             opts->filter_pass = true;
 
             const int optlen = strlen(argv[++i]);
@@ -120,7 +109,7 @@ void parse_args(int argc, char **argv) {
                 char c = argv[i][j];
                 int l;
 
-                if (!parseInt(new char[2] {
+                if (!parse_int(new char[2] {
                         argv[i][j + 1], 0 }, &l)) {
                 outfln("Could not parse int: %s", argv[i][j + 1]);
                 exit(1);
@@ -159,7 +148,7 @@ void parse_args(int argc, char **argv) {
             continue;
         }
 
-        if (opt == "-b") {
+        if (opt == "-b" || opt == "--brute") {
             opts->pass_source = PASS_BRUTEFORCE;
 
             const int optlen = strlen(argv[++i]);
@@ -192,19 +181,25 @@ void parse_args(int argc, char **argv) {
             continue;
         }
 
-        if (opt == "-bmn") {
-            if (!parseInt(argv[++i], &opts->brute_opts->min_len)) {
+        if (opt == "-bmn" || opt == "--brute-min") {
+            if (!parse_int(argv[++i], &opts->brute_opts->min_len)) {
                 outfln("Invalid number: %s", argv[i]);
                 exit(1);
             }
             continue;
         }
 
-        if (opt == "-bmx") {
-            if (!parseInt(argv[++i], &opts->brute_opts->max_len)) {
+        if (opt == "-bmx" || opt == "--brute-max") {
+            if (!parse_int(argv[++i], &opts->brute_opts->max_len)) {
                 outfln("Invalid number: %s", argv[i]);
                 exit(1);
             }
+            continue;
+        }
+
+        if (opt == "--brute-start") {
+            opts->brute_opts->has_start_pass = true;
+            strcpy(opts->brute_opts->start_pass, argv[++i]);
             continue;
         }
 

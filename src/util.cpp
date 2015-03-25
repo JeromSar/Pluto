@@ -3,11 +3,17 @@
 #include <iostream> // fopen()
 
 void countdown() {
-    if (opts->minimal) {
+    if (opts->quiet) {
         return;
     }
 
-    out("Press enter anytime to stop");
+
+    if (opts->enter_info) {
+        out("Press enter anytime to show progress");
+    } else {
+        out("Press enter anytime to stop");
+    }
+
     Sleep(500);
     out(".");
     Sleep(500);
@@ -59,4 +65,20 @@ void out_combo(LogonStatus *status) {
         outln("Failure!");
         outfln("Status: %s (%d)", status->msg, static_cast<int> (status->rvalue));
     }
+}
+
+// http://stackoverflow.com/questions/478528/parsing-integer-to-string-c
+
+int parse_int(const char *s, int *i) {
+    char *ep;
+    long l;
+
+    l = strtol(s, &ep, 0);
+
+    if (*ep != 0) {
+        return 0;
+    }
+
+    *i = (int) l;
+    return 1;
 }

@@ -39,14 +39,17 @@ struct BruteOptions {
     bool digit = false;
     bool punct = false;
     bool space = false;
+    bool has_start_pass = false;
+    char* start_pass = MAKE_STR;
 };
 
 struct Options {
     bool verbose = false;
     bool help = false;
     bool interactive = false;
-    bool stop = false; // Stop if the first crack has been found
-    bool minimal = false; // Minimal output
+    bool single = false; // Stop if the first crack has been found
+    bool quiet = false; // Minimal output
+    bool enter_info = false;
 
     char *domain = MAKE_STR;
 
@@ -74,7 +77,6 @@ struct Options {
 
 inline bool enter_down() {
     if (_kbhit() && _getch() == '\r') {
-        puts("\nStopped.");
         return true;
     }
     return false;

@@ -45,7 +45,7 @@ bool filter_pass(char* pass) {
             continue;
         }
 
-        if (ispunct(c)) {
+        if (ispunct(c) || c == ' ') {
             punct++;
             digit_or_punct++;
             continue;

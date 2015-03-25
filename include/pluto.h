@@ -4,8 +4,9 @@
 #include "util.h" // OptionSet
 #include "winapi.h" // LogonStatus
 #include <conio.h> // _getch(), _kbhit()
-#include <cstdio> // FILE, puts
+#include <cstdio> // FILE
 #include <string> // std::string
+#include <set> // std::set
 
 // Allow strings to be used more freely
 using namespace std;
@@ -39,6 +40,9 @@ void interactive();
 extern Options* opts;
 void show_help(char **argv);
 
+// mangler.cpp
+void mangle(char *pass, set<char*> *target);
+
 // optionparser.cpp
 void parse_args(int argc, char **argv);
 
@@ -49,7 +53,7 @@ FILE* open_file(const char *filename, const char* opts);
 void out_combo(string user);
 void out_combo(string user, string pass, bool success);
 void out_combo(LogonStatus *status);
-
+int parse_int(const char *s, int *i);
 
 #endif
 

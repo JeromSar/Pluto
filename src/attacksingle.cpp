@@ -51,13 +51,20 @@ void single_attack() {
             }
             pass = pass_it->next();
 
-            // Check enter
-            if (enter_down()) {
-                return;
-            }
 
             if (opts->filter_pass && !filter_pass(pass)) {
                 continue;
+            }
+
+            // Check enter
+            if (enter_down()) {
+                if (opts->enter_info) {
+                    outln(string(user) + " > " + string(pass));
+                } else {
+                   outln("\nStopped.");
+                   return;
+                }
+
             }
 
             // New try
@@ -83,7 +90,7 @@ void single_attack() {
         out_combo(user, pass, success);
 
         // Skip check
-        if (success && opts->stop) {
+        if (success && opts->single) {
             break;
         }
     }
