@@ -52,17 +52,31 @@ void single_attack() {
             pass = pass_it->next();
 
             // Check enter
-            if (isEnter()) {
+            if (enter_down()) {
                 return;
             }
 
-            // Try logon
+            if (opts->filter_pass && !filter_pass(pass)) {
+                continue;
+            }
+
+            // New try
+            if (opts->limit_tries && tries >= opts->max_tries) {
+                break;
+            }
             tries++;
+
+            // Try logon
             if (fast_logon(user, pass, domain)) {
                 success = true;
                 cracks++;
                 break; // Next user
             }
+
+            if (opts->verbose) {
+                outln(string(user) + " > " + string(pass));
+            }
+
         }
 
         // Out combo

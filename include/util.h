@@ -21,6 +21,16 @@ enum PassSource {
     PASS_BRUTEFORCE,
 };
 
+struct FilterOptions {
+    int min_alpha = 0;
+    int min_lower_alpha = 0;
+    int min_upper_alpha = 0;
+    int min_digit = 0;
+    int min_punct = 0;
+    int min_digit_or_punct = 0;
+    int min_size = 0;
+};
+
 struct BruteOptions {
     int min_len = 3;
     int max_len = 6;
@@ -40,12 +50,18 @@ struct Options {
 
     char *domain = MAKE_STR;
 
+    bool limit_tries = false;
+    int max_tries = 0;
+
     UserSource user_source;
     Iterator<char*> *users;
 
     PassSource pass_source;
     Iterator<char*> *passwords;
     BruteOptions *brute_opts = new BruteOptions;
+
+    bool filter_pass = false;
+    FilterOptions *filter_opts = new FilterOptions;
 
     bool write_out_file = false;
     FileWriter *out_file;
@@ -56,7 +72,7 @@ struct Options {
     }
 };
 
-inline bool isEnter() {
+inline bool enter_down() {
     if (_kbhit() && _getch() == '\r') {
         puts("\nStopped.");
         return true;

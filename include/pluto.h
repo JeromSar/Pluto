@@ -16,12 +16,8 @@ inline void outln(string str);
 inline void outfln(string str);
 inline void outln();
 
-// constants.h empty
-
-// output.h empty
-
 // util.h
-inline bool isEnter();
+inline bool enter_down();
 
 // winapi.h
 inline LogonStatus* verbose_logon(char* user, char* pass, char* domain);
@@ -32,6 +28,9 @@ void brute_attack();
 
 // attacksingle.cpp
 void single_attack();
+
+// filter.cpp
+bool filter_pass(char *pass);
 
 // interactive.cpp
 void interactive();

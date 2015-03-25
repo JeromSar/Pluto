@@ -4,6 +4,7 @@
 #include "include/FileWriter.h"
 
 // http://stackoverflow.com/questions/478528/parsing-integer-to-string-c
+
 int parseInt(const char *s, int *i) {
     char *ep;
     long l;
@@ -27,7 +28,7 @@ void parse_args(int argc, char **argv) {
     for (int i = 1; i < argc; i++) {
         string opt = argv[i];
 
-        if (strlen(argv[i]) < 2) {
+        if (opt.length() < 2) {
             outfln("Invalid argument: %s", argv[i]);
             exit(1);
         }
@@ -101,6 +102,63 @@ void parse_args(int argc, char **argv) {
             continue;
         }
 
+        if (opt == "-t") {
+            opts->limit_tries = true;
+            if (!parseInt(argv[++i], &opts->max_tries)) {
+                outfln("Invalid number: %s", argv[i]);
+                exit(1);
+            }
+            continue;
+        }
+
+        if (opt == "-f") {
+            opts->filter_pass = true;
+
+            const int optlen = strlen(argv[++i]);
+
+            for (int j = 0; j < optlen; j += 2) {
+                char c = argv[i][j];
+                int l;
+
+                if (!parseInt(new char[2] {
+                        argv[i][j + 1], 0 }, &l)) {
+                outfln("Could not parse int: %s", argv[i][j + 1]);
+                exit(1);
+            }
+
+                FilterOptions *fopts = opts->filter_opts;
+
+                switch (c) {
+                    case 's':
+                        fopts->min_size = l;
+                        break;
+                    case 'd':
+                        fopts->min_digit = l;
+                        break;
+                    case 'D':
+                        fopts->min_digit_or_punct = l;
+                        break;
+                    case 'l':
+                        fopts->min_alpha = l;
+                        break;
+                    case 'a':
+                        fopts->min_lower_alpha = l;
+                        break;
+                    case 'A':
+                        fopts->min_upper_alpha = l;
+                        break;
+                    case 'p':
+                        fopts->min_punct = l;
+                        break;
+                    default:
+                        outfln("Unrecognized option: %c", c);
+                        exit(1);
+                        break;
+                }
+            }
+            continue;
+        }
+
         if (opt == "-b") {
             opts->pass_source = PASS_BRUTEFORCE;
 
@@ -127,10 +185,10 @@ void parse_args(int argc, char **argv) {
                         break;
                     default:
                         outfln("Not a valid character type: %c", c);
+                        exit(1);
                         return;
                 }
             }
-
             continue;
         }
 

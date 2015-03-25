@@ -2,7 +2,7 @@
 #include <ctype.h> // ispunct()
 
 inline char* populateChars(BruteOptions *type) {
-    char *chars = MAKE_STR_100;
+    char *chars = MAKE_STR;
     char i;
     int j = 0;
 
@@ -88,18 +88,12 @@ void brute_attack() {
         // PASS LOOP
         while (true) {
 
-            tries++;
-            if (fast_logon(user, pass, domain)) {
-                cracks++;
-                success = true;
-                break;
+            // Check enter
+            if (enter_down()) {
+                return;
             }
 
-            if (opts->verbose) {
-                outln("> " + string(user) + ":" + string(pass));
-            }
-
-            // For each char
+            // Update password
             i = 0; // Reset char iterator
             do {
                 if (pass[i] == chrs[chrslen - 1]) { // Last char
@@ -122,6 +116,27 @@ void brute_attack() {
                 if (cur_len > max_len) {
                     break;
                 }
+            }
+
+            if (opts->filter_pass && !filter_pass(pass)) {
+                continue;
+            }
+
+            // New try
+            if (opts->limit_tries && tries >= opts->max_tries) {
+                break;
+            }
+            tries++;
+
+            // Try logon
+            if (fast_logon(user, pass, domain)) {
+                cracks++;
+                success = true;
+                break;
+            }
+
+            if (opts->verbose) {
+                outln(string(user) + " > " + string(pass));
             }
         }
 

@@ -3,6 +3,10 @@
 #include <iostream> // fopen()
 
 void countdown() {
+    if (opts->minimal) {
+        return;
+    }
+
     out("Press enter anytime to stop");
     Sleep(500);
     out(".");
