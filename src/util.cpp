@@ -3,10 +3,9 @@
 #include <iostream> // fopen()
 
 void countdown() {
-    if (opts->quiet) {
+    if (opts->quiet || (opts->user_source == USER_GIVEN && opts->pass_source == PASS_GIVEN)) {
         return;
     }
-
 
     if (opts->enter_info) {
         out("Press enter anytime to show progress");
@@ -81,4 +80,33 @@ int parse_int(const char *s, int *i) {
 
     *i = (int) l;
     return 1;
+}
+
+// http://www.intechgrity.com/c-program-replacing-a-substring-from-a-string/#
+
+void strrep(char *str, const char *from, const char *to) {
+    //a buffer variable to do all replace things
+    char buffer[2048];
+    //to store the pointer returned from strstr
+    char *ch;
+
+    // First exit condition
+    if (!(ch = strstr(str, from))) {
+        return;
+    }
+
+    //copy all the content to buffer before the first occurrence of the search string
+    strncpy(buffer, str, ch - str);
+
+    //prepare the buffer for appending by adding a null to the end of it
+    buffer[ch - str] = 0;
+
+    //append using sprintf function
+    sprintf(buffer + (ch - str), "%s%s", to, ch + strlen(from));
+
+    //empty o_string for copying
+    str[0] = 0;
+    strcpy(str, buffer);
+    //pass recursively to replace other occurrences
+    return strrep(str, from, to);
 }

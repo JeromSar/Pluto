@@ -1,5 +1,3 @@
-#include <cstring> // strpbrk()
-#include "include/constants.h"
 #include "include/SingleIterator.h"
 
 SingleIterator::SingleIterator(char* s) {

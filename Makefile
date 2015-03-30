@@ -21,7 +21,7 @@ DIST_DIR = dist
 #  -I.     adds the current working directory to the include path
 #
 CC = g++
-CFLAGS = -g -Wall -Wextra -std=c++0x -I. -c
+CFLAGS = -O0 -g -Wall -Wextra -std=c++11 -I. -c
 LFLAGS = -g
 CFLAGS_DEPLOY = -O3
 LFLAGS_DEPLOY = -static-libgcc -static-libstdc++

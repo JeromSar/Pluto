@@ -21,6 +21,10 @@ enum PassSource {
     PASS_BRUTEFORCE,
 };
 
+struct MangleOptions {
+    bool all = false;
+};
+
 struct FilterOptions {
     int min_alpha = 0;
     int min_lower_alpha = 0;
@@ -55,6 +59,9 @@ struct Options {
 
     bool limit_tries = false;
     int max_tries = 0;
+
+    bool mangle_pass = false;
+    MangleOptions *mangle_opts = new MangleOptions;
 
     UserSource user_source;
     Iterator<char*> *users;

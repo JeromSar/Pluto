@@ -7,6 +7,7 @@
 #include <cstdio> // FILE
 #include <string> // std::string
 #include <set> // std::set
+#include <functional> // std::function
 
 // Allow strings to be used more freely
 using namespace std;
@@ -24,11 +25,8 @@ inline bool enter_down();
 inline LogonStatus* verbose_logon(char* user, char* pass, char* domain);
 inline bool fast_logon(char* user, char* pass, char* domain);
 
-// attackbrute.cpp
-void brute_attack();
-
-// attacksingle.cpp
-void single_attack();
+// cracker.cpp
+void crack();
 
 // filter.cpp
 bool filter_pass(char *pass);
@@ -41,10 +39,15 @@ extern Options* opts;
 void show_help(char **argv);
 
 // mangler.cpp
-void mangle(char *pass, set<char*> *target);
+typedef std::function<void(char*, const char*) > rule;
+typedef std::function<bool(char*) > callback;
+void mangle_init();
+bool mangle(char *user, char *pass, char *domain);
 
 // optionparser.cpp
 void parse_args(int argc, char **argv);
+
+// stat.cpp in stat.h
 
 // util.cpp
 void countdown();
@@ -54,6 +57,7 @@ void out_combo(string user);
 void out_combo(string user, string pass, bool success);
 void out_combo(LogonStatus *status);
 int parse_int(const char *s, int *i);
+void strrep(char *str, const char *from, const char *to);
 
 #endif
 

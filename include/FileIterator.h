@@ -1,8 +1,7 @@
 #ifndef FILEITERATOR_H
 #define	FILEITERATOR_H
 
-#include <cstdio>
-#include <string>
+#include <cstdio> // FILE
 #include <cstring> // strpbrk()
 #include "console.h"
 #include "constants.h"

@@ -1,6 +1,7 @@
 #include "include/pluto.h"
 #include "include/SingleIterator.h"
 #include "include/FileIterator.h"
+#include "include/BruteIterator.h"
 #include <memory>
 
 Options* opts = new Options;
@@ -17,9 +18,14 @@ void show_help(char **argv) {
             "   -d, --domain <domain>        Specifies the external domain to use\n"
             "   -o, --output <file>          Specifies output file. Output will be appended to an existing file.\n"
             "   -s, --single                 Single mode. Stops after one successful crack\n"
+            "   -m, --mangle <options>       Mangle passwords. Tries different passwords variations per password\n"
             "   -f, --filter <options>       Filter passwords. Skips passwords that don't match the specified options\n"
             "   -t, --max-tries <max>        Specifies the maximum amount of tries per crack\n"
             "   --enter-info                 Shows cracking progress when pressing enter. Press Ctrl+C to stop cracking\n"
+            "\n"
+            "Mangling:\n"
+            "   -m, --mangle [a]             Mangles passwords with the specified rules\n"
+            "     a                          Uses all mangling rules\n"
             "\n"
             "Filtering:\n"
             "   -f [s<digit>][d<digit>][D<digit>][l<digit>][a<digit>][A<digit>][p<digit>]\n"
@@ -49,17 +55,16 @@ void show_help(char **argv) {
             "     s                           Includes space\n"
             "   -bmn, --brute-min <min>       Specifies the minimum password size for the bruteforce attack\n"
             "   -bmx, --brute-max <max>       Specifies the maximum password size for the bruteforce attack\n"
-            "   --brute-start <pass>          Specifies the brute password with which to start cracking\nn"
+            "   --brute-start <pass>          Specifies the brute password with which to start cracking\n"
             );
 }
 
 int main(int argc, char **argv) {
 
-    outln("");
-
     parse_args(argc, argv);
 
     if (!opts->quiet) {
+        outln("");
         outln("# " + NAME + " version " + VERSION + " by " + AUTHOR);
         outln("# Copyright (C) 2014-2015 " + AUTHOR + ". All rights reserved.");
         outln("");
@@ -75,13 +80,7 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
-    // Bruteforce
-    if (opts->pass_source == PASS_BRUTEFORCE) {
-        brute_attack();
-        return 0;
-    }
+    crack();
 
-    // Single mode
-    single_attack();
     return 0;
 }

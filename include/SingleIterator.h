@@ -1,8 +1,9 @@
 #ifndef SINGLEITERATOR_H
 #define	SINGLEITERATOR_H
 
-#include <string>
 #include "Iterator.h"
+#include <cstring> // strpbrk()
+#include <cstdlib> // free
 
 using namespace std;
 
@@ -27,4 +28,3 @@ private:
 };
 
 #endif
-

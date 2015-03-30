@@ -6,7 +6,7 @@
 using namespace std;
 
 #define NAME std::string("Pluto")
-#define VERSION std::string("2.1a")
+#define VERSION std::string("2.2.0")
 #define AUTHOR std::string("Overlord")
 
 // strings

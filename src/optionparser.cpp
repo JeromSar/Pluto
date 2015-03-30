@@ -2,6 +2,7 @@
 #include "include/FileIterator.h"
 #include "include/SingleIterator.h"
 #include "include/FileWriter.h"
+#include "include/BruteIterator.h"
 
 void parse_args(int argc, char **argv) {
     if (argc == 1) {
@@ -100,6 +101,28 @@ void parse_args(int argc, char **argv) {
             continue;
         }
 
+        if (opt == "-m" || opt == "--mangle") {
+            opts->mangle_pass = true;
+
+            const int optlen = strlen(argv[++i]);
+
+            for (int j = 0; j < optlen; j++) {
+                char c = argv[i][j];
+
+                switch (c) {
+                    case 'a':
+                        opts->mangle_opts->all = true;
+                        break;
+                    default:
+                        outfln("Unrecognized option: %c", c);
+                        exit(1);
+                        return;
+                }
+            }
+
+            continue;
+        }
+
         if (opt == "-f" || opt == "--filter") {
             opts->filter_pass = true;
 
@@ -173,10 +196,12 @@ void parse_args(int argc, char **argv) {
                         opts->brute_opts->punct = true;
                         break;
                     default:
-                        outfln("Not a valid character type: %c", c);
+                        outfln("Unrecognized option: %c", c);
                         exit(1);
                         return;
                 }
+
+                opts->passwords = new BruteIterator(opts->brute_opts);
             }
             continue;
         }
@@ -186,6 +211,8 @@ void parse_args(int argc, char **argv) {
                 outfln("Invalid number: %s", argv[i]);
                 exit(1);
             }
+            // Ensure password length is in range
+            opts->brute_opts->max_len = (opts->brute_opts->min_len > opts->brute_opts->max_len ? opts->brute_opts->min_len : opts->brute_opts->max_len);
             continue;
         }
 
@@ -194,6 +221,8 @@ void parse_args(int argc, char **argv) {
                 outfln("Invalid number: %s", argv[i]);
                 exit(1);
             }
+            // Ensure password length is in range
+            opts->brute_opts->min_len = (opts->brute_opts->min_len > opts->brute_opts->max_len ? opts->brute_opts->max_len : opts->brute_opts->min_len);
             continue;
         }
 
