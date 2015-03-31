@@ -1,12 +1,11 @@
 #ifndef PLUTO_H
 #define	PLUTO_H
 
-#include "util.h" // OptionSet
+#include "util.h" // Options
 #include "winapi.h" // LogonStatus
 #include <conio.h> // _getch(), _kbhit()
 #include <cstdio> // FILE
 #include <string> // std::string
-#include <set> // std::set
 #include <functional> // std::function
 
 // Allow strings to be used more freely

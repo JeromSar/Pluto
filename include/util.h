@@ -3,8 +3,7 @@
 
 #include <conio.h> // _getch(), _kbhit()
 #include <string> // std::string
-#include "constants.h" // MAKE_STR
-#include "console.h"
+#include "base.h"
 #include "Iterator.h"
 #include "FileWriter.h"
 
@@ -88,7 +87,5 @@ inline bool enter_down() {
     }
     return false;
 }
-
-
 
 #endif

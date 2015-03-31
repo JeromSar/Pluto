@@ -1,7 +1,7 @@
 #ifndef WINAPI_H
 #define WINAPI_H
 
-#include "stat.h"
+#include "base.h"
 #include <Windows.h> // Advapi32.dll
 
 struct LogonStatus {

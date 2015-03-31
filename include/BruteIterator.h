@@ -1,12 +1,11 @@
 #ifndef BRUTEITERATOR_H
 #define	BRUTEITERATOR_H
 
-#include "Iterator.h"
-#include "util.h" // BruteOptions
 #include <cstdlib> // free())
 #include <cstring> // strcpy())
 #include <cctype> // ispunct(), isalpha())
-
+#include "Iterator.h"
+#include "util.h" // BruteOptions
 
 using namespace std;
 

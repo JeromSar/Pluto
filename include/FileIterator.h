@@ -3,8 +3,7 @@
 
 #include <cstdio> // FILE
 #include <cstring> // strpbrk()
-#include "console.h"
-#include "constants.h"
+#include "base.h"
 #include "Iterator.h"
 
 using namespace std;
