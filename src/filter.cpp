@@ -11,7 +11,7 @@ int digit = 0;
 int punct = 0;
 int digit_or_punct = 0;
 
-bool filter_pass(char* pass) {
+bool filter_pass(const char* pass) {
 
     pass_size = strlen(pass);
 

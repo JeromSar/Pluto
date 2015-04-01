@@ -3,36 +3,43 @@
 
 #include "base.h"
 
-rule capt = [ = ](char *base, const char *pass){
+rule capt_first_letter = [ = ](char *base, const char *pass){
     strcpy(base, pass);
     base[0] = toupper(base[0]);
     return base;
 };
 
-rule a123 = [ = ](char *base, const char *pass){
+rule capt_all = [ = ](char *base, const char *pass){
     strcpy(base, pass);
-    strcat(base, "123");
-    return base;
+    int i;
+    for (i = 0; base[i]; i++) {
+        base[i] = toupper(base[i]);
+    }
+    //terminate string
+    base[i] = '\0';
 };
 
-rule a123456 = [ = ](char *base, const char *pass){
-    strcpy(base, pass);
-    strcat(base, "123456");
-    return base;
-};
+extern vector<rule> mangle_rules;
 
-rule re3 = [ = ](char *base, const char *pass){
-    strcpy(base, pass);
-    strrep(base, "e", "3");
-    return base;
-};
+inline void register_rule(rule r) {
+    mangle_rules.push_back(r);
+}
 
-rule ra4 = [ = ](char *base, const char *pass){
-    strcpy(base, pass);
-    strrep(base, "a", "4");
-    return base;
-};
+inline void register_rep_rule(const char *from, const char *to) {
+    register_rule([ = ](char *base, const char *pass){
+        strcpy(base, pass);
+        strrep(base, from, to);
+        return base;
+    });
+}
 
+inline void register_suf_rule(const char *append) {
+    register_rule([ = ](char *base, const char *pass){
+        strcpy(base, pass);
+        strcat(base, append);
+        return base;
+    });
+}
 
 #endif
 

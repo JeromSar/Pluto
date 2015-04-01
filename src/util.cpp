@@ -1,6 +1,7 @@
 #include  "include/pluto.h"
-//
+
 #include <iostream> // fopen()
+#include <sstream> // sstream
 
 void countdown() {
     if (opts->quiet || (opts->user_source == USER_GIVEN && opts->pass_source == PASS_GIVEN)) {
@@ -109,4 +110,12 @@ void strrep(char *str, const char *from, const char *to) {
     strcpy(str, buffer);
     //pass recursively to replace other occurrences
     return strrep(str, from, to);
+}
+
+// http://stackoverflow.com/questions/19473093/int-to-char-c-help-me
+
+const char* itostr(int x) {
+    stringstream ss;
+    ss << x;
+    return ss.str().c_str();
 }

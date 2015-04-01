@@ -28,7 +28,7 @@ inline bool fast_logon(char* user, char* pass, char* domain);
 void crack();
 
 // filter.cpp
-bool filter_pass(char *pass);
+bool filter_pass(const char *pass);
 
 // interactive.cpp
 void interactive();
@@ -57,6 +57,7 @@ void out_combo(string user, string pass, bool success);
 void out_combo(LogonStatus *status);
 int parse_int(const char *s, int *i);
 void strrep(char *str, const char *from, const char *to);
+const char* itostr(int x);
 
 #endif
 
