@@ -12,9 +12,9 @@ vector<rule> mangle_rules;
 // Size of rules vector for speed
 int rules_size;
 
-// Pointers to current data
+// Pointers to current data, only cur_pass is copied
 char *cur_user;
-char *cur_pass;
+char *cur_pass = MAKE_STR;
 char *cur_domain;
 vector<string> cur_mangles;
 
@@ -35,6 +35,11 @@ void mangle_init() {
     register_rep_rule("a", "4");
     register_rep_rule("a", "@");
     register_rep_rule("e", "3");
+    register_rep_rule("t", "7");
+    register_rep_rule("o", "0");
+    register_rep_rule("s", "5");
+    register_rep_rule("i", "1");
+    register_rep_rule("s", "$");
 
     //
     // Suffixes
@@ -45,9 +50,9 @@ void mangle_init() {
     register_suf_rule("?");
 
     // 0-15
-    for (int i = 0; i <= 15; i++) {
+    for (int i = 0; i <= 10; i++) {
         register_suf_rule(itostr(i));
-        register_suf_rule(string(string("00") + string(itostr(i))).c_str());
+        register_suf_rule(string(string("0") + string(itostr(i))).c_str());
     }
 
     // 1995-2018
@@ -58,8 +63,8 @@ void mangle_init() {
     // 1 - 12345678
     for (int i = 1; i <= 8; i++) {
         string str;
-        for (int j = i; j <= i; j++) {
-            str += itostr(j);
+        for (int j = 1; j <= i; j++) {
+            str += string(itostr(j));
         }
         register_suf_rule(str.c_str());
     }
@@ -80,6 +85,10 @@ void rec_mangle(int offset, int rules_left) {
     static char* mangle_pass = MAKE_STR; // Mangled password holder
     static vector<rule> iter_rules; // Rules rec_mangle is currently processing
 
+    if (offset == 0) {
+        iter_rules.clear();
+    }
+
     if (rules_left == 0) {
 
         // Prep pass for mangling
@@ -88,13 +97,6 @@ void rec_mangle(int offset, int rules_left) {
         // Apply rules
         for (auto rule : iter_rules) {
             rule(mangle_pass, mangle_pass);
-        }
-        // Clear rules for next mangle
-        iter_rules.clear();
-
-        // Filter pass
-        if (opts->filter_pass && !filter_pass(mangle_pass)) {
-            return;
         }
 
         cur_mangles.push_back(string(mangle_pass));
@@ -115,7 +117,7 @@ bool mangle(char *user, char *pass, char* domain) {
     if (!do_mangle) {
 
         // Filter
-        if (filter_pass(pass)) {
+        if (opts->filter_pass && filter_pass(pass)) {
             return false;
         }
 
@@ -124,12 +126,16 @@ bool mangle(char *user, char *pass, char* domain) {
 
     // Clear previous mangles
     cur_mangles.clear();
+    cur_mangles.push_back(pass);;
+
 
     // Set password being mangled
     strcpy(cur_pass, pass);
 
     // Mangle password: populates `cur_mangles`
-    for (int i = 1; i < rules_size; i++) {
+    //for (int i = 1; i < rules_size; i++) { // TODO combo lockup?
+
+    for (int i = 1; i <= 2; i++) {
         // Mangle password with i amount of rules
         rec_mangle(0, i);
     }
@@ -139,10 +145,14 @@ bool mangle(char *user, char *pass, char* domain) {
     sort(cur_mangles.begin(), cur_mangles.end());
     cur_mangles.erase(unique(cur_mangles.begin(), cur_mangles.end()), cur_mangles.end());
 
+
+    //outfln("%i mangling rules.", cur_mangles.size());
+
     for (string mangle : cur_mangles) {
 
         // Check mangle
-        if (filter_pass(mangle.c_str())) {
+        if (opts->filter_pass && filter_pass(mangle.c_str())) {
+            outln("Filtered: " + string(mangle.c_str()));
             continue;
         }
 

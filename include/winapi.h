@@ -36,14 +36,14 @@ inline LogonStatus* verbose_logon(char* user, char* pass, char* domain) {
         status->success = false;
 
         FormatMessageA(
-                FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-                NULL,
-                status->rvalue,
-                0,
-                (char*) &status->msg,
-                0,
-                NULL
-                );
+            FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+            NULL,
+            status->rvalue,
+            0,
+            (char*) &status->msg,
+            0,
+            NULL
+            );
     }
 
     CloseHandle(handle);
