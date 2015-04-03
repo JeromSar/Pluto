@@ -29,7 +29,7 @@ void show_help(char **argv) {
             "     l                          Uses l33tsp3@k rules\n"
             "     c                          Uses capitalization rules\n"
             "     s                          Uses standard suffixes\n"
-            "     d<digit>                   Sets mangling rule depth. Use 0 for max\n"
+            "     d<digit>                   Sets mangling rule depth. Default is 3. Use 0 for max.\n"
             "     a                          Uses all combinations of rules, prefixes and suffixes, may be slow\n"
             "\n"
             "Filtering:\n"
@@ -58,8 +58,8 @@ void show_help(char **argv) {
             "     d                           Includes digit characters\n"
             "     p                           Includes punctuation characters\n"
             "     s                           Includes space\n"
-            "   -bmn, --brute-min <min>       Specifies the minimum password size for the bruteforce attack\n"
-            "   -bmx, --brute-max <max>       Specifies the maximum password size for the bruteforce attack\n"
+            "   -bmn, --brute-min <min>       Specifies the minimum password size for the bruteforce attack. Default is 3.\n"
+            "   -bmx, --brute-max <max>       Specifies the maximum password size for the bruteforce attack. Default is 6.\n"
             "   --brute-start <pass>          Specifies the brute password with which to start cracking\n"
             );
 }
