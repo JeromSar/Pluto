@@ -102,7 +102,7 @@ void parse_args(int argc, char **argv) {
         }
 
         if (opt == "-m" || opt == "--mangle") {
-            opts->mangle_pass = true;
+            opts->do_mangling = true;
 
             const int optlen = strlen(argv[++i]);
 
@@ -111,7 +111,30 @@ void parse_args(int argc, char **argv) {
 
                 switch (c) {
                     case 'a':
-                        opts->mangle_opts->all = true;
+                        opts->mangle_opts->prefix = true;
+                        opts->mangle_opts->suffix = true;
+                        opts->mangle_opts->leetspeak = true;
+                        opts->mangle_opts->capt = true;
+                        opts->mangle_opts->depth = 0;
+                        break;
+                    case 'p':
+                        opts->mangle_opts->prefix = true;
+                        break;
+                    case 'l':
+                        opts->mangle_opts->leetspeak = true;
+                        break;
+                    case 's':
+                        opts->mangle_opts->suffix = true;
+                        break;
+                    case 'c':
+                        opts->mangle_opts->capt = true;
+                        break;
+                    case 'd':
+                        if (!parse_int(new char[2] {
+                                argv[i][++j], 0 }, &opts->mangle_opts->depth)) {
+                        outfln("Invalid number: %s", argv[i]);
+                        exit(1);
+                }
                         break;
                     default:
                         outfln("Unrecognized option: %c", c);

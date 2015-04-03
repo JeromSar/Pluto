@@ -21,26 +21,16 @@ rule capt_all = [ = ](char *base, const char *pass){
 
 extern vector<rule> mangle_rules;
 
-inline void register_rule(rule r) {
-    mangle_rules.push_back(r);
+inline void register_mangle_rule(rule rule) {
+    mangle_rules.push_back(rule);
 }
 
-inline void register_rep_rule(const char *from, const char *to) {
+inline void register_mangle_rule(const char *from, const char *to) {
     mangle_rules.push_back([ = ](char *base, const char *pass){
         strcpy(base, pass);
         strrep(base, from, to);
         return base;
     });
 }
-
-inline void register_suf_rule(const char *append) {
-    const string str = string(append);
-    mangle_rules.push_back([ = ](char *base, const char *pass){
-        strcpy(base, pass);
-        strcat(base, str.c_str());
-        return base;
-    });
-}
-
 #endif
 

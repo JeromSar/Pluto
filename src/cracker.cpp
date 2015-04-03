@@ -11,7 +11,7 @@ void crack() {
     Iterator<char*> *pass_it = opts->passwords;
 
     // Single user & pass, verbose mode
-    if (opts->verbose && opts->user_source == USER_GIVEN && opts->pass_source == PASS_GIVEN && !opts->mangle_pass) {
+    if (opts->verbose && opts->user_source == USER_GIVEN && opts->pass_source == PASS_GIVEN && !opts->do_mangling) {
         out_combo(verbose_logon(user_it->next(), pass_it->next(), opts->domain));
         outln("Done!");
         return;
@@ -60,11 +60,6 @@ void crack() {
                 success = true;
                 stat_cracks++;
                 break; // Next user
-            }
-
-            // Output combo
-            if (opts->verbose) {
-                outln(string(user) + " > " + string(pass));
             }
         }
 

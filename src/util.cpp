@@ -114,8 +114,7 @@ void strrep(char *str, const char *from, const char *to) {
 
 // http://stackoverflow.com/questions/19473093/int-to-char-c-help-me
 
-const char* itostr (int a)
-{
+const char* itostr(int a) {
     stringstream tmp;
     tmp << a;
     return tmp.str().c_str();

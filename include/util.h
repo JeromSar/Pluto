@@ -21,7 +21,11 @@ enum PassSource {
 };
 
 struct MangleOptions {
-    bool all = false;
+    bool prefix = false;
+    bool leetspeak = false;
+    bool suffix = false;
+    bool capt = false;
+    int depth = 3;
 };
 
 struct FilterOptions {
@@ -59,7 +63,7 @@ struct Options {
     bool limit_tries = false;
     int max_tries = 0;
 
-    bool mangle_pass = false;
+    bool do_mangling = false;
     MangleOptions *mangle_opts = new MangleOptions;
 
     UserSource user_source;
