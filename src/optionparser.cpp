@@ -173,13 +173,13 @@ void parse_args(int argc, char **argv) {
                     case 'D':
                         fopts->min_digit_or_punct = l;
                         break;
-                    case 'l':
+                    case 'a':
                         fopts->min_alpha = l;
                         break;
-                    case 'a':
+                    case 'l':
                         fopts->min_lower_alpha = l;
                         break;
-                    case 'A':
+                    case 'u':
                         fopts->min_upper_alpha = l;
                         break;
                     case 'p':

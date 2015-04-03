@@ -69,7 +69,7 @@ void mangle_init() {
     suffixes.push_back("?");
     suffixes.push_back("123");
 
-    // 1-9 & 01 - 09
+    // 1-9 & 01-09
     for (int i = 1; i <= 9; i++) {
         suffixes.push_back(itostr(i));
         suffixes.push_back(string(string("0") + string(itostr(i))).c_str());
@@ -84,7 +84,7 @@ void mangle_init() {
         suffixes.push_back(itostr(i));
     }
 
-    // 1 - 12345678
+    // 1-12345678
     for (int i = 1; i <= 8; i++) {
         string str;
         for (int j = 1; j <= i; j++) {
@@ -138,6 +138,8 @@ void rec_mangle(int offset, int rules_left) {
  * In such a case, the correct password is stored in `pass`.
  */
 bool mangle(char *user, char *pass, char* domain) {
+
+    int mangle_tries = 0;
 
     // Check no mangling
     if (!do_any_mangle) {
@@ -220,7 +222,7 @@ bool mangle(char *user, char *pass, char* domain) {
             continue;
         }
 
-        if (opts->max_tries != 0 && stat_tries >= opts->max_tries) {
+        if (opts->max_tries != 0 && ++mangle_tries > opts->max_tries) {
             return false;
         }
 

@@ -23,7 +23,7 @@ DIST_DIR = dist
 CC = g++
 CFLAGS = -O0 -g -Wall -Wextra -std=c++11 -I. -c
 LFLAGS = -g
-CFLAGS_DEPLOY = -O3
+CFLAGS_DEPLOY = -O3 -std=c++11 -I. -c
 LFLAGS_DEPLOY = -static-libgcc -static-libstdc++
 
 # No config beyond this line
@@ -31,6 +31,12 @@ LFLAGS_DEPLOY = -static-libgcc -static-libstdc++
 # Define sources and objects
 SOURCES = $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp)
 OBJECTS = $(addprefix $(BUILD_DIR)/,$(subst $(SRC_DIR)/,,$(SOURCES:.cpp=.o)))
+
+ifeq ($(MAKECMDGOALS),deploy)
+COMPILE_FLAGS = $(CFLAGS_DEPLOY)
+else
+COMPILE_FLAGS = $(CFLAGS)
+endif
 
 # Sources location
 vpath %.cpp $(SRC_DIR)
@@ -42,23 +48,16 @@ dirs:
 	@mkdir -p $(BUILD_DIR) $(DIST_DIR)
 
 # Target - deploy
-deploy: all
+deploy: dirs $(OBJECTS)
+	$(CC) $(LFLAGS_DEPLOY) -o $(DIST_DIR)/$(TARGET) $(OBJECTS)
 
 # Target - all
 all: dirs $(OBJECTS)
-ifeq ($(MAKECMDGOALS),deploy)
-	$(CC) $(LFLAGS) $(LFLAGS_DEPLOY) -o $(DIST_DIR)/$(TARGET) $(OBJECTS)
-else
 	$(CC) $(LFLAGS) -o $(DIST_DIR)/$(TARGET) $(OBJECTS)
-endif
 
 # Target - .cpp file
 $(BUILD_DIR)/%.o: %.cpp
-ifeq ($(MAKECMDGOALS),deploy)
-	$(CC) $(CFLAGS) $(CFLAGS_DEPLOY) $< -o $@
-else
-	$(CC) $(CFLAGS) $< -o $@
-endif
+	$(CC) $(COMPILE_FLAGS) $< -o $@
 
 # Target - clean
 clean:
