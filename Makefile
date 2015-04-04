@@ -49,7 +49,7 @@ dirs:
 
 # Target - deploy
 deploy: dirs $(OBJECTS)
-	$(CC) $(LFLAGS_DEPLOY) -o $(DIST_DIR)/$(TARGET) $(OBJECTS)
+	$(CC) $(LFLAGS_DEPLOY) -o $(DIST_DIR)/$(TARGET) $(OBJECTS)-dist
 
 # Target - all
 all: dirs $(OBJECTS)

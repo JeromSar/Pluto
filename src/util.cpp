@@ -14,11 +14,11 @@ void countdown() {
         out("Press enter anytime to stop");
     }
 
-    Sleep(500);
+    Sleep(200);
     out(".");
-    Sleep(500);
+    Sleep(200);
     out(".");
-    Sleep(500);
+    Sleep(200);
     out(".\n\n");
 }
 

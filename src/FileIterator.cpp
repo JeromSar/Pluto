@@ -23,6 +23,10 @@ char* FileIterator::next() {
         *e = 0;
     }
 
+    if (cur_line[0] == 0) {
+        return next();
+    }
+
     return cur_line;
 }
 
