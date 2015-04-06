@@ -1,7 +1,7 @@
 #include  "include/pluto.h"
 
 #include <iostream> // fopen()
-#include <sstream> // ostringstream
+#include <sstream> // stringstream
 
 void countdown() {
     if (opts->quiet || (opts->user_source == USER_GIVEN && opts->pass_source == PASS_GIVEN)) {
@@ -14,11 +14,11 @@ void countdown() {
         out("Press enter anytime to stop");
     }
 
-    Sleep(200);
+    thread_sleep(200);
     out(".");
-    Sleep(200);
+    thread_sleep(200);
     out(".");
-    Sleep(200);
+    thread_sleep(200);
     out(".\n\n");
 }
 

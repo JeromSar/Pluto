@@ -47,5 +47,17 @@ inline void outfln(const char* format, ...) {
     va_end(argptr);
 }
 
+inline void info(string str) {
+    outln("[*] " + str);
+}
+
+inline void fine(string str) {
+    outln("[+] " + str);
+}
+
+inline void warn(string str) {
+    outln("[!] " + str);
+}
+
 
 #endif

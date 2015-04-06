@@ -3,6 +3,7 @@
 
 #include <conio.h> // _getch(), _kbhit()
 #include <string> // std::string
+#include <Windows.h> // Sleep
 #include "base.h"
 #include "Iterator.h"
 #include "FileWriter.h"
@@ -90,6 +91,12 @@ inline bool enter_down() {
         return true;
     }
     return false;
+}
+
+// http://stackoverflow.com/questions/4184468/sleep-for-milliseconds
+
+inline void thread_sleep(int milliseconds) {
+    Sleep(milliseconds);
 }
 
 #endif

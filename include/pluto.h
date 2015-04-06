@@ -1,28 +1,22 @@
 #ifndef PLUTO_H
 #define	PLUTO_H
 
-#include "util.h" // Options
-#include "winapi.h" // LogonStatus
 #include <conio.h> // _getch(), _kbhit()
 #include <cstdio> // FILE
 #include <string> // std::string
 #include <functional> // std::function
 
-// Allow strings to be used more freely
+// Passthrough
+#include "base.h"
+#include "util.h"
+#include "winapi.h"
+
 using namespace std;
 
-// console.h
-inline void out(string str);
-inline void outln(string str);
-inline void outfln(string str);
-inline void outln();
-
-// util.h
-inline bool enter_down();
-
-// winapi.h
-inline LogonStatus* verbose_logon(char* user, char* pass, char* domain);
-inline bool fast_logon(char* user, char* pass, char* domain);
+// console.cpp
+void console_update();
+void console_clear();
+void console_clearline();
 
 // cracker.cpp
 void crack();
@@ -38,15 +32,29 @@ extern Options* opts;
 void show_help(char **argv);
 
 // mangler.cpp
-typedef std::function<void(char*, const char*) > rule;
-typedef std::function<bool(char*) > callback;
+typedef function<void(char*, const char*) > rule;
+typedef function<bool(char*) > callback;
 void mangle_init();
 bool mangle(char *user, char *pass, char *domain);
 
 // optionparser.cpp
 void parse_args(int argc, char **argv);
 
-// stat.cpp in stat.h
+// stat.cpp
+void update_tps(int tries, int millis);
+void update_mpu(int mangles);
+extern time_t stat_start;
+extern int stat_users;
+extern int stat_tries;
+extern int stat_cracks;
+extern int stat_tps; // tries per sec
+extern int stat_mpu; // mangles per user
+
+// time.cpp
+long ms_timestamp();
+time_t ut_timestamp();
+string format_time(time_t utime);
+string get_formatted_time();
 
 // util.cpp
 void countdown();

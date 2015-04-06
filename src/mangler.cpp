@@ -139,20 +139,26 @@ void rec_mangle(int offset, int rules_left) {
  */
 bool mangle(char *user, char *pass, char* domain) {
 
-    int mangle_tries = 0;
-
     // Check no mangling
     if (!do_any_mangle) {
 
         // Filter
         if (opts->filter_pass && filter_pass(pass)) {
+            if (opts->verbose) {
+                outln("f " + string(user) + " | " + string(pass));
+            }
             return false;
+        }
+
+        if (opts->verbose) {
+            outln("> " + string(user) + " | " + string(pass));
         }
 
         return fast_logon(user, pass, domain);
     }
 
     // Clear previous mangles
+    int mangle_tries = 0;
     cur_mangles.clear();
 
     // Set password being mangled
@@ -160,7 +166,7 @@ bool mangle(char *user, char *pass, char* domain) {
 
     // Mangling start //
 
-    cur_mangles.push_back(string(pass));
+    cur_mangles.push_back(string(cur_pass));
 
     // Mangle password: populates `cur_mangles`
     if (do_mangle) {
@@ -208,10 +214,11 @@ bool mangle(char *user, char *pass, char* domain) {
     cur_mangles.reserve(new_mangles.size()); // preallocate memory
     cur_mangles.insert(cur_mangles.end(), new_mangles.begin(), new_mangles.end());
 
+    update_mpu(cur_mangles.size());
     // Mangling end //
 
-    //outfln("%i mangles.", cur_mangles.size());
 
+    int start_millis = ms_timestamp();
     for (string mangle : cur_mangles) {
 
         // Check mangle
@@ -222,24 +229,27 @@ bool mangle(char *user, char *pass, char* domain) {
             continue;
         }
 
-        if (opts->max_tries != 0 && ++mangle_tries > opts->max_tries) {
+        mangle_tries++;
+        if (opts->max_tries != 0 && mangle_tries > opts->max_tries) {
             return false;
         }
 
         // Store in cur_pass since we're not using that anymore anyway
         strcpy(cur_pass, mangle.c_str());
 
-        // Logon
-        if (fast_logon(user, cur_pass, domain)) {
-            // Copy mangled password to the original pointer
-            strcpy(pass, cur_pass);
-            return true;
-        }
-
         if (opts->verbose) {
             outln("> " + string(user) + " | " + string(cur_pass));
         }
+
+        // Logon
+        if (fast_logon(user, cur_pass, domain)) {
+            strcpy(pass, cur_pass); // Copy password to the original pointer
+            update_tps(mangle_tries, ms_timestamp() - start_millis);
+            return true;
+        }
+
     }
+    update_tps(mangle_tries, ms_timestamp() - start_millis);
 
     return false;
 }

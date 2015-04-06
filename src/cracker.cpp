@@ -26,6 +26,7 @@ void crack() {
     countdown();
 
     // User loop
+    console_update();
     while (user_it->has_next()) {
         user = user_it->next();
         stat_users++;
@@ -48,23 +49,18 @@ void crack() {
                 }
             }
 
-            // New try
-            if (opts->limit_tries && stat_tries > opts->max_tries) {
-                break;
-            }
-
-
             // Try logon
             // mangle() handles password filtering
             if (mangle(user, pass, domain)) {
                 success = true;
-                stat_cracks++;
                 break; // Next user
             }
         }
 
         // Out combo
+        console_clear();
         out_combo(user, pass, success);
+        console_update();
 
         // Skip check
         if (success && opts->single) {
@@ -72,13 +68,15 @@ void crack() {
         }
     }
 
+    console_clear();
     outln();
+
     if (user_it->has_next()) {
         out("Stopped. ");
     } else {
         out("Done! ");
     }
-    outfln("(%i tries, %i/%i cracked)", stat_tries, stat_cracks, stat_users);
+    outfln("(%i tries, %i/%i cracked @ %i tps)", stat_tries, stat_cracks, stat_users, stat_tps);
 
     user_it->close();
     pass_it->close();

@@ -13,7 +13,6 @@ struct LogonStatus {
 };
 
 inline LogonStatus* verbose_logon(char* user, char* pass, char* domain) {
-
     stat_tries++;
 
     // Return value
@@ -44,6 +43,8 @@ inline LogonStatus* verbose_logon(char* user, char* pass, char* domain) {
                 0,
                 NULL
                 );
+    } else {
+        stat_cracks++;
     }
 
     CloseHandle(handle);
@@ -52,7 +53,6 @@ inline LogonStatus* verbose_logon(char* user, char* pass, char* domain) {
 }
 
 inline bool fast_logon(char* user, char* pass, char* domain) {
-
     stat_tries++;
 
     HANDLE handle;
@@ -65,6 +65,11 @@ inline bool fast_logon(char* user, char* pass, char* domain) {
             &handle);
     CloseHandle(handle);
     LocalFree(handle);
+
+    if (success) {
+        stat_cracks++;
+    }
+
     return success;
 }
 

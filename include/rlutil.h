@@ -438,6 +438,29 @@ namespace rlutil {
 #endif
     }
 
+    // pluto start
+
+    RLUTIL_INLINE short getX() {
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        if (!GetConsoleScreenBufferInfo(
+                GetStdHandle(STD_OUTPUT_HANDLE),
+                &csbi
+                ))
+            return -1;
+        return csbi.dwCursorPosition.X + 1;
+    }
+
+    RLUTIL_INLINE short getY() {
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        if (!GetConsoleScreenBufferInfo(
+                GetStdHandle(STD_OUTPUT_HANDLE),
+                &csbi
+                ))
+            return -1;
+        return csbi.dwCursorPosition.Y + 1;
+    }
+    // pluto end
+
     /// Function: locate
     /// Sets the cursor position to 1-based x,y.
 
