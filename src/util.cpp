@@ -9,9 +9,9 @@ void countdown() {
     }
 
     if (opts->enter_info) {
-        out("Press enter anytime to show progress");
+        out("\nPress enter anytime to show progress");
     } else {
-        out("Press enter anytime to stop");
+        out("\nPress enter anytime to stop");
     }
 
     thread_sleep(200);

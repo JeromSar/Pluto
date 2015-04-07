@@ -39,6 +39,10 @@ void mangle_init() {
     //
     prefixes.push_back("123");
 
+    if (do_prefix) {
+        info("Loaded %i prefixes", prefixes.size());
+    }
+
     //
     // Mangle
     //
@@ -60,6 +64,10 @@ void mangle_init() {
 
     if (mangle_depth == 0) {
         mangle_depth = mangle_rules.size();
+    }
+
+    if (do_mangle) {
+        info("Loaded %i mangling rules (depth: %i)", mangle_rules.size(), mangle_depth);
     }
 
     //
@@ -96,6 +104,10 @@ void mangle_init() {
     // Remove duplicates
     sort(suffixes.begin(), suffixes.end());
     suffixes.erase(unique(suffixes.begin(), suffixes.end()), suffixes.end());
+
+    if (do_suffix) {
+        info("Loaded %i suffixes", suffixes.size());
+    }
 }
 
 /*

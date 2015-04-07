@@ -1,11 +1,10 @@
+#include <vector>
+
 #include "include/pluto.h"
 
 // Attack from a specific password
 
 void crack() {
-
-    // Prepare mangling
-    mangle_init();
 
     Iterator<char*> *user_it = opts->users;
     Iterator<char*> *pass_it = opts->passwords;
@@ -17,22 +16,37 @@ void crack() {
         return;
     }
 
+
     // Setup vars
+    vector<string> users;
     bool success = false;
-    char* user;
+    char* user = MAKE_STR;
     char* pass;
     char* domain = opts->domain;
+
+    // Prepare mangling
+    mangle_init();
+
+    // Precache users
+    while (user_it->has_next()) {
+        users.push_back(string(user_it->next()));
+        stat_users++;
+    }
+
+    if (users.size() > 1) {
+        info("Precached %i usernames", users.size());
+    }
 
     countdown();
 
     // User loop
-    console_update();
-    while (user_it->has_next()) {
-        user = user_it->next();
-        stat_users++;
+    for (string string_user : users) {
+        strcpy(user, string_user.c_str());
 
         // Reset password
         pass_it->reset();
+
+        console_update();
 
         // Pass loop
         success = false;
@@ -44,7 +58,7 @@ void crack() {
                 if (opts->enter_info) {
                     outln(string(user) + " > " + string(pass));
                 } else {
-                    outln("\nStopped.");
+                    warn("\nStopped.");
                     return;
                 }
             }
@@ -60,7 +74,6 @@ void crack() {
         // Out combo
         console_clear();
         out_combo(user, pass, success);
-        console_update();
 
         // Skip check
         if (success && opts->single) {
@@ -71,11 +84,7 @@ void crack() {
     console_clear();
     outln();
 
-    if (user_it->has_next()) {
-        out("Stopped. ");
-    } else {
-        out("Done! ");
-    }
+    out("Done! ");
     outfln("(%i tries, %i/%i cracked @ %i tps)", stat_tries, stat_cracks, stat_users, stat_tps);
 
     user_it->close();

@@ -51,6 +51,15 @@ inline void info(string str) {
     outln("[*] " + str);
 }
 
+inline void info(const char* format, ...) {
+    va_list argptr;
+    va_start(argptr, format);
+    out("[*] ");
+    vfprintf(stdout, format, argptr);
+    outln();
+    va_end(argptr);
+}
+
 inline void fine(string str) {
     outln("[+] " + str);
 }
