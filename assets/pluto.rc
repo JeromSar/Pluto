@@ -1,0 +1,25 @@
+id ICON "pluto.ico"
+
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  2,3,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "FileDescription", "Heuristic password cracker for windows."
+      VALUE "FileVersion", "2.3"
+      VALUE "InternalName", "pluto"
+      VALUE "LegalCopyright", "Jerom van der Sar"
+      VALUE "OriginalFilename", "pluto.exe"
+      VALUE "ProductName", "Pluto"
+      VALUE "ProductVersion", "2.3"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END

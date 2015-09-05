@@ -1,12 +1,12 @@
 default: all
-.PHONY: all dirs deploy clean
+.PHONY: all dirs icon deploy clean
 
 # Build target
 TARGET = pluto
 
 # Directories
 SRC_DIR = src
-#GEN_DIR = gen
+ASSETS_DIR = assets
 BUILD_DIR = build
 DIST_DIR = dist
 
@@ -47,9 +47,15 @@ vpath %.cpp $(SRC_DIR)
 dirs:
 	@mkdir -p $(BUILD_DIR) $(DIST_DIR)
 
+# Target - icon
+icon: $(BUILD_DIR)/$(TARGET).res
+
+$(BUILD_DIR)/$(TARGET).res: $(ASSETS_DIR)/$(TARGET).rc
+	windres $(ASSETS_DIR)/$(TARGET).rc -O coff -o $(BUILD_DIR)/$(TARGET).res
+	
 # Target - deploy
-deploy: dirs $(OBJECTS)
-	$(CC) $(LFLAGS_DEPLOY) -o $(DIST_DIR)/$(TARGET)-dist $(OBJECTS)
+deploy: dirs icon $(OBJECTS)
+	$(CC) $(LFLAGS_DEPLOY) -o $(DIST_DIR)/$(TARGET)-dist $(OBJECTS) $(BUILD_DIR)/$(TARGET).res
 
 # Target - all
 all: dirs $(OBJECTS)

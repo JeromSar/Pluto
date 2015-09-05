@@ -12,7 +12,7 @@ using namespace std;
 
 // Project constants
 #define NAME std::string("Pluto")
-#define VERSION std::string("2.3.0")
+#define VERSION std::string("2.3")
 #define AUTHOR std::string("Prozza")
 
 // Other constants
