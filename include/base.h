@@ -4,7 +4,7 @@
 #include <cstdlib> // malloc
 #include <cstdio> // vfprintf
 #include <cstdarg> // va_list
-#include <iostream> // cout
+#include <iostream>
 
 // Base header file on which all other header files can depend
 
@@ -12,8 +12,8 @@ using namespace std;
 
 // Project constants
 #define NAME std::string("Pluto")
-#define VERSION std::string("2.2.0")
-#define AUTHOR std::string("Overlord")
+#define VERSION std::string("2.3.0")
+#define AUTHOR std::string("Prozza")
 
 // Other constants
 #define DEF_STR_SIZE 256
@@ -27,19 +27,23 @@ extern int stat_cracks;
 
 // Console utilities
 
-inline void out(string str) {
+inline void out(string str)
+{
     cout << str;
 }
 
-inline void outln(string str) {
+inline void outln(string str)
+{
     cout << str << endl;
 }
 
-inline void outln() {
+inline void outln()
+{
     cout << endl;
 }
 
-inline void outfln(const char* format, ...) {
+inline void outfln(const char* format, ...)
+{
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stdout, format, argptr);
@@ -47,11 +51,13 @@ inline void outfln(const char* format, ...) {
     va_end(argptr);
 }
 
-inline void info(string str) {
+inline void info(string str)
+{
     outln("[*] " + str);
 }
 
-inline void info(const char* format, ...) {
+inline void info(const char* format, ...)
+{
     va_list argptr;
     va_start(argptr, format);
     out("[*] ");
@@ -60,11 +66,13 @@ inline void info(const char* format, ...) {
     va_end(argptr);
 }
 
-inline void fine(string str) {
+inline void fine(string str)
+{
     outln("[+] " + str);
 }
 
-inline void warn(string str) {
+inline void warn(string str)
+{
     outln("[!] " + str);
 }
 

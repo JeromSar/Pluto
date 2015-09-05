@@ -1,7 +1,6 @@
 #ifndef WINAPI_H
 #define WINAPI_H
 
-#include "base.h"
 #include <Windows.h> // Advapi32.dll
 
 struct LogonStatus {
@@ -12,7 +11,8 @@ struct LogonStatus {
     char* msg;
 };
 
-inline LogonStatus* verbose_logon(char* user, char* pass, char* domain) {
+inline LogonStatus* verbose_logon(char* user, char* pass, char* domain)
+{
     stat_tries++;
 
     // Return value
@@ -52,9 +52,8 @@ inline LogonStatus* verbose_logon(char* user, char* pass, char* domain) {
     return status;
 }
 
-inline bool fast_logon(char* user, char* pass, char* domain) {
-    stat_tries++;
-
+inline bool fast_logon(char* user, char* pass, char* domain)
+{
     HANDLE handle;
     const bool success = LogonUserA(
             user,
@@ -65,11 +64,6 @@ inline bool fast_logon(char* user, char* pass, char* domain) {
             &handle);
     CloseHandle(handle);
     LocalFree(handle);
-
-    if (success) {
-        stat_cracks++;
-    }
-
     return success;
 }
 

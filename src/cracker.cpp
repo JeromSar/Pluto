@@ -1,5 +1,3 @@
-#include <vector>
-
 #include "include/pluto.h"
 
 // Attack from a specific password
@@ -16,16 +14,12 @@ void crack() {
         return;
     }
 
-
     // Setup vars
     vector<string> users;
     bool success = false;
     char* user = MAKE_STR;
-    char* pass;
+    char* pass = MAKE_STR;
     char* domain = opts->domain;
-
-    // Prepare mangling
-    mangle_init();
 
     // Precache users
     while (user_it->has_next()) {
@@ -37,7 +31,11 @@ void crack() {
         info("Precached %i usernames", users.size());
     }
 
+    // Prepare mangling
+    mangle_init();
+
     countdown();
+    outln();
 
     // User loop
     for (string string_user : users) {
@@ -46,46 +44,80 @@ void crack() {
         // Reset password
         pass_it->reset();
 
-        console_update();
-
         // Pass loop
         success = false;
         while (pass_it->has_next()) {
-            pass = pass_it->next();
+            char* base_pass = pass_it->next();
 
             // Check enter
             if (enter_down()) {
-                if (opts->enter_info) {
-                    outln(string(user) + " > " + string(pass));
-                } else {
-                    warn("\nStopped.");
-                    return;
-                }
+                out("[*] " + string(user) + " (" + string(base_pass) + ") | ");
+                console_update();
             }
 
-            // Try logon
-            // mangle() handles password filtering
-            if (mangle(user, pass, domain)) {
-                success = true;
-                break; // Next user
-            }
-        }
+            // Mangle
+            vector<string> mangles = *mangle(base_pass);
+
+            // Try mangles
+            int mangle_tries = 0;
+            bool next_user = false;
+            for (string mangled_pass : mangles) {
+                if (next_user) {
+                    break;
+                }
+
+                strcpy(pass, mangled_pass.c_str());
+
+                // Filter?
+                if (opts->filter_pass && !filter_pass(pass)) {
+                    verbose_combo(user, pass, true);
+                    continue;
+                } else {
+                    verbose_combo(user, pass, false);
+                }
+
+                // Mangle limit?
+                mangle_tries++;
+                if (opts->max_tries != 0 && mangle_tries > opts->max_tries) {
+                    next_user = true;
+                    break;
+                }
+
+                // Dry run?
+                if (opts->dry_run) {
+                    fine("Dry: '" + string(user) + "' | '" + string(pass) + "'");
+                    continue;
+                }
+
+                // Try logon
+                stat_tries++;
+                if (fast_logon(user, pass, domain)) {
+                    success = true;
+                    next_user = true;
+                    stat_cracks++;
+                    break;
+                }
+            } // Mangle loop
+
+            update_tps(mangle_tries);
+        } // Pass loop
 
         // Out combo
-        console_clear();
-        out_combo(user, pass, success);
+        if (!opts->dry_run) {
+            out_combo(user, pass, success);
+        }
 
-        // Skip check
         if (success && opts->single) {
             break;
         }
-    }
-
-    console_clear();
+    } // User loop
     outln();
 
-    out("Done! ");
-    outfln("(%i tries, %i/%i cracked @ %i tps)", stat_tries, stat_cracks, stat_users, stat_tps);
+    if (!opts->dry_run) {
+        outfln("[*] Done! (%i tries, %i/%i cracked @ %i tps)", stat_tries, stat_cracks, stat_users, stat_tps);
+    } else {
+        info("Done!");
+    }
 
     user_it->close();
     pass_it->close();

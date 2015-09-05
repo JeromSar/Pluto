@@ -18,7 +18,7 @@ void show_help(char **argv) {
             "   -m, --mangle <options>       Mangle passwords. Tries different passwords variations per password\n"
             "   -f, --filter <options>       Filter passwords. Skips passwords that don't match the specified options\n"
             "   -t, --max-tries <max>        Specifies the maximum amount of tries per user\n"
-            "   --enter-info                 Shows cracking progress when pressing enter. Press Ctrl+C to stop cracking\n"
+            "   --dry-run                    Designates a 'dry run'. Only display the combinations that would be run."
             "\n"
             "Mangling:\n"
             "   -m, --mangle [a]             Mangles passwords with the specified rules\n"
@@ -63,33 +63,6 @@ void show_help(char **argv) {
 
 int main(int argc, char **argv) {
 
-    /* //Debug
-    int i = 0;
-
-    while (true) {
-        thread_sleep(1000);
-
-        outln("YEAH!");
-
-        // Clear console
-        short x = rlutil::getX();
-        short y = rlutil::getY();
-        console_clearline();
-        outln();
-        console_clearline();
-        outln();
-        console_clearline();
-        rlutil::locate(x, y);
-
-        // Print one line out
-        x = rlutil::getX();
-        y = rlutil::getY();
-        outln();
-        outfln("Test %i (%i, %i)", i++, x, y);
-        rlutil::locate(x, y);
-    }
-    return 0; */
-
     stat_start = ut_timestamp();
 
     parse_args(argc, argv);
@@ -100,7 +73,6 @@ int main(int argc, char **argv) {
         info("Copyright (C) 2014-2015 " + AUTHOR + ". All rights reserved.");
         outln();
         info("Started on " + get_formatted_time());
-        outln();
     }
 
     if (opts->help) {
@@ -113,9 +85,11 @@ int main(int argc, char **argv) {
         exit(0);
     }
 
+    if (opts->dry_run) {
+        warn("Performing dry run");
+    }
     crack();
 
-    outln();
     info("Finished at " + get_formatted_time());
     //info("Elapsed time: ");
     return 0;

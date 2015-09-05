@@ -14,12 +14,15 @@ void update_mpu(int mangles) {
     stat_mpu = m_mangles / ++m_users;
 }
 
-void update_tps(int tries, int millis) {
+void update_tps(int tries) {
+    static int start = ms_timestamp();
     static int tps_tries = 0;
     static int tps_millis = 1;
+
     tps_tries += tries;
-    tps_millis += millis;
-    double tps_ms = (double) tps_tries / tps_millis;
+    tps_millis += ms_timestamp() - start;
+
+    double tps_ms = ((double) tps_tries) / ((double) tps_millis);
     stat_tps = tps_ms * 1000;
 }
 

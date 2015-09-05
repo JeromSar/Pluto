@@ -4,6 +4,7 @@
 #include <conio.h> // _getch(), _kbhit()
 #include <string> // std::string
 #include <Windows.h> // Sleep
+
 #include "base.h"
 #include "Iterator.h"
 #include "FileWriter.h"
@@ -57,7 +58,7 @@ struct Options {
     bool interactive = false;
     bool single = false; // Stop if the first crack has been found
     bool quiet = false; // Minimal output
-    bool enter_info = false;
+    bool dry_run = false; // Only displays combinations, doesn't actually run
 
     char *domain = MAKE_STR;
 
@@ -80,13 +81,15 @@ struct Options {
     bool write_out_file = false;
     FileWriter *out_file;
 
-    Options() {
+    Options()
+    {
         domain[0] = '.';
         domain[1] = '\0';
     }
 };
 
-inline bool enter_down() {
+inline bool enter_down()
+{
     if (_kbhit() && _getch() == '\r') {
         return true;
     }
@@ -95,7 +98,8 @@ inline bool enter_down() {
 
 // http://stackoverflow.com/questions/4184468/sleep-for-milliseconds
 
-inline void thread_sleep(int milliseconds) {
+inline void thread_sleep(int milliseconds)
+{
     Sleep(milliseconds);
 }
 

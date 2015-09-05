@@ -43,8 +43,8 @@ void parse_args(int argc, char **argv) {
             continue;
         }
 
-        if (opt == "--enter-info") {
-            opts->enter_info = true;
+        if (opt == "--dry-run") {
+            opts->dry_run = true;
             continue;
         }
 
@@ -131,7 +131,8 @@ void parse_args(int argc, char **argv) {
                         break;
                     case 'd':
                         if (!parse_int(new char[2] {
-                                argv[i][++j], 0 }, &opts->mangle_opts->depth)) {
+                                argv[i][++j], 0
+                            }, &opts->mangle_opts->depth)) {
                         outfln("Invalid number: %s", argv[i]);
                         exit(1);
                 }

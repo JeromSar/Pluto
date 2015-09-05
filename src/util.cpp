@@ -2,24 +2,65 @@
 
 #include <iostream> // fopen()
 #include <sstream> // stringstream
+#include <string> // std::to_string
+
+// Some display utilities
+
+void verbose_combo(const char* user, const char* pass, bool filtered) {
+    if (!opts->verbose) {
+        return;
+    }
+
+    if (filtered) {
+        info("f " + string(user) + " | " + string(pass));
+    } else {
+        info("x " + string(user) + " | " + string(pass));
+    }
+}
+
+void out_combo(string user) {
+    fine(user + ":UNKNOWN");
+    if (opts->write_out_file) {
+        opts->out_file->writeln(user + ":UNKNOWN");
+    }
+}
+
+void out_combo(string user, string pass, bool success) {
+    if (!success) {
+        out_combo(user);
+        return;
+    }
+
+    fine(user + ":" + pass);
+    if (opts->write_out_file) {
+        opts->out_file->writeln(user + ":" + pass);
+    }
+}
+
+void out_combo(LogonStatus *status) {
+    if (status->success) {
+        fine("Success!");
+        fine("Password for " + string(status->user) + ": " + string(status->pass));
+    } else {
+        warn("Failure!");
+    }
+    fine("Status: " + string(status->msg) + " (" + itostr(status->rvalue) + ")");
+}
 
 void countdown() {
     if (opts->quiet || (opts->user_source == USER_GIVEN && opts->pass_source == PASS_GIVEN)) {
         return;
     }
 
-    if (opts->enter_info) {
-        out("\nPress enter anytime to show progress");
-    } else {
-        out("\nPress enter anytime to stop");
-    }
+    out("[*] Press enter anytime to show progress");
 
-    thread_sleep(200);
+    thread_sleep(500);
     out(".");
-    thread_sleep(200);
+    thread_sleep(500);
     out(".");
-    thread_sleep(200);
-    out(".\n\n");
+    thread_sleep(500);
+    out(".");
+    outln();
 }
 
 FILE* open_file(const char *filename) {
@@ -34,37 +75,6 @@ FILE* open_file(const char *filename, const char* opts) {
     }
 
     return fileout;
-}
-
-void out_combo(string user) {
-    outln(user + ":UNKNOWN");
-    if (opts->write_out_file) {
-        opts->out_file->writeln(user + ":UNKNOWN");
-    }
-}
-
-void out_combo(string user, string pass, bool success) {
-    if (!success) {
-        out_combo(user);
-        return;
-    }
-
-    outln(user + ":" + pass);
-    if (opts->write_out_file) {
-        opts->out_file->writeln(user + ":" + pass);
-    }
-}
-
-void out_combo(LogonStatus *status) {
-
-    if (status->success) {
-        outln("Success!");
-        outfln("Password for %s: %s", status->user, status->pass);
-        outfln("Status: %s (%d)", status->msg, static_cast<int> (status->rvalue));
-    } else {
-        outln("Failure!");
-        outfln("Status: %s (%d)", status->msg, static_cast<int> (status->rvalue));
-    }
 }
 
 // http://stackoverflow.com/questions/478528/parsing-integer-to-string-c
