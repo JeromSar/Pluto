@@ -7,11 +7,11 @@ string format_stats() {
 
     fmt << stat_tries << " tries";
     if (opts->do_mangling) {
-        fmt << " (" << stat_mpu << " mpu),";
+        fmt << " (" << stat_mpu << " mpu), ";
     } else {
         fmt << ", ";
     }
-    fmt << stat_cracks << "/" << stat_users << "cracked @ " << stat_tps + " tps";
+    fmt << stat_cracks << "/" << stat_users << " cracked @ " << stat_tps + " tps";
     return fmt.str();
 }
 
