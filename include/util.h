@@ -81,15 +81,13 @@ struct Options {
     bool write_out_file = false;
     FileWriter *out_file;
 
-    Options()
-    {
+    Options() {
         domain[0] = '.';
         domain[1] = '\0';
     }
 };
 
-inline bool enter_down()
-{
+inline bool enter_down() {
     if (_kbhit() && _getch() == '\r') {
         return true;
     }
@@ -98,8 +96,7 @@ inline bool enter_down()
 
 // http://stackoverflow.com/questions/4184468/sleep-for-milliseconds
 
-inline void thread_sleep(int milliseconds)
-{
+inline void thread_sleep(int milliseconds) {
     Sleep(milliseconds);
 }
 

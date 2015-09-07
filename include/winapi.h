@@ -11,8 +11,7 @@ struct LogonStatus {
     char* msg;
 };
 
-inline LogonStatus* verbose_logon(char* user, char* pass, char* domain)
-{
+inline LogonStatus* verbose_logon(char* user, char* pass, char* domain) {
     stat_tries++;
 
     // Return value
@@ -52,8 +51,7 @@ inline LogonStatus* verbose_logon(char* user, char* pass, char* domain)
     return status;
 }
 
-inline bool fast_logon(char* user, char* pass, char* domain)
-{
+inline bool fast_logon(char* user, char* pass, char* domain) {
     HANDLE handle;
     const bool success = LogonUserA(
             user,

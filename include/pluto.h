@@ -13,7 +13,7 @@
 #include "winapi.h"
 
 // console.cpp
-void console_update();
+string format_stats();
 
 // cracker.cpp
 void crack();

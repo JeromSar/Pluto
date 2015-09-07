@@ -69,10 +69,10 @@ int main(int argc, char **argv) {
 
     if (!opts->quiet) {
         outln();
-        info(NAME + " version " + VERSION + " by " + AUTHOR);
-        info("Copyright (C) 2014-2015 " + AUTHOR + ". All rights reserved.");
+        infoln(NAME + " version " + VERSION + " by " + AUTHOR);
+        infoln("Copyright (C) 2014-2015 " + AUTHOR + ". All rights reserved.");
         outln();
-        info("Started on " + get_formatted_time());
+        infoln("Started on " + get_formatted_time());
     }
 
     if (opts->help) {
@@ -86,11 +86,11 @@ int main(int argc, char **argv) {
     }
 
     if (opts->dry_run) {
-        warn("Performing dry run");
+        warnln("Performing dry run");
     }
     crack();
 
-    info("Finished at " + get_formatted_time());
+    infoln("Finished at " + get_formatted_time());
     //info("Elapsed time: ");
     return 0;
 }

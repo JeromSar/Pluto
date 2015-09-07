@@ -28,7 +28,7 @@ void crack() {
     }
 
     if (users.size() > 1) {
-        info("Precached %i usernames", users.size());
+        infoln("Precached %i usernames", users.size());
     }
 
     // Prepare mangling
@@ -40,6 +40,7 @@ void crack() {
     // User loop
     for (string string_user : users) {
         strcpy(user, string_user.c_str());
+        bool next_user = false;
 
         // Reset password
         pass_it->reset();
@@ -51,8 +52,7 @@ void crack() {
 
             // Check enter
             if (enter_down()) {
-                out("[*] " + string(user) + " (" + string(base_pass) + ") | ");
-                console_update();
+                infoln(string(user) + " (" + string(base_pass) + ") | " + format_stats());
             }
 
             // Mangle
@@ -60,12 +60,7 @@ void crack() {
 
             // Try mangles
             int mangle_tries = 0;
-            bool next_user = false;
             for (string mangled_pass : mangles) {
-                if (next_user) {
-                    break;
-                }
-
                 strcpy(pass, mangled_pass.c_str());
 
                 // Filter?
@@ -85,7 +80,7 @@ void crack() {
 
                 // Dry run?
                 if (opts->dry_run) {
-                    fine("Dry: '" + string(user) + "' | '" + string(pass) + "'");
+                    fineln("Dry: '" + string(user) + "' | '" + string(pass) + "'");
                     continue;
                 }
 
@@ -100,6 +95,11 @@ void crack() {
             } // Mangle loop
 
             update_tps(mangle_tries);
+
+            if (next_user) { // Get out of the pass loop
+                break;
+            }
+
         } // Pass loop
 
         // Out combo
@@ -113,10 +113,11 @@ void crack() {
     } // User loop
     outln();
 
+    info("Done!");
     if (!opts->dry_run) {
-        outfln("[*] Done! (%i tries, %i/%i cracked @ %i tps)", stat_tries, stat_cracks, stat_users, stat_tps);
+        out(" - " + format_stats());
     } else {
-        info("Done!");
+        outln();
     }
 
     user_it->close();

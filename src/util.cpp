@@ -12,14 +12,14 @@ void verbose_combo(const char* user, const char* pass, bool filtered) {
     }
 
     if (filtered) {
-        info("f " + string(user) + " | " + string(pass));
+        infoln("f " + string(user) + " | " + string(pass));
     } else {
-        info("x " + string(user) + " | " + string(pass));
+        infoln("x " + string(user) + " | " + string(pass));
     }
 }
 
 void out_combo(string user) {
-    fine(user + ":UNKNOWN");
+    fineln(user + ":UNKNOWN");
     if (opts->write_out_file) {
         opts->out_file->writeln(user + ":UNKNOWN");
     }
@@ -31,7 +31,7 @@ void out_combo(string user, string pass, bool success) {
         return;
     }
 
-    fine(user + ":" + pass);
+    fineln(user + ":" + pass);
     if (opts->write_out_file) {
         opts->out_file->writeln(user + ":" + pass);
     }
@@ -39,12 +39,12 @@ void out_combo(string user, string pass, bool success) {
 
 void out_combo(LogonStatus *status) {
     if (status->success) {
-        fine("Success!");
-        fine("Password for " + string(status->user) + ": " + string(status->pass));
+        fineln("Success!");
+        fineln("Password for " + string(status->user) + ": " + string(status->pass));
     } else {
-        warn("Failure!");
+        warnln("Failure!");
     }
-    fine("Status: " + string(status->msg) + " (" + itostr(status->rvalue) + ")");
+    fineln("Status: " + string(status->msg) + " (" + itostr(status->rvalue) + ")");
 }
 
 void countdown() {

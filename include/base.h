@@ -4,7 +4,7 @@
 #include <cstdlib> // malloc
 #include <cstdio> // vfprintf
 #include <cstdarg> // va_list
-#include <iostream>
+#include <iostream> // cout
 
 // Base header file on which all other header files can depend
 
@@ -27,23 +27,19 @@ extern int stat_cracks;
 
 // Console utilities
 
-inline void out(string str)
-{
+inline void out(string str) {
     cout << str;
 }
 
-inline void outln(string str)
-{
+inline void outln(string str) {
     cout << str << endl;
 }
 
-inline void outln()
-{
+inline void outln() {
     cout << endl;
 }
 
-inline void outfln(const char* format, ...)
-{
+inline void outfln(const char* format, ...) {
     va_list argptr;
     va_start(argptr, format);
     vfprintf(stdout, format, argptr);
@@ -51,28 +47,41 @@ inline void outfln(const char* format, ...)
     va_end(argptr);
 }
 
-inline void info(string str)
-{
+inline void info(string str) {
+    out("[*] ");
+}
+
+inline void infoln(string str) {
     outln("[*] " + str);
 }
 
-inline void info(const char* format, ...)
-{
+inline void info(const char* format, ...) {
     va_list argptr;
     va_start(argptr, format);
     out("[*] ");
     vfprintf(stdout, format, argptr);
-    outln();
     va_end(argptr);
+    outln();
 }
 
-inline void fine(string str)
-{
+inline void infoln(const char* format, ...) {
+    info(format);
+    outln();
+}
+
+inline void fine(string str) {
+    out("[+] " + str);
+}
+
+inline void fineln(string str) {
     outln("[+] " + str);
 }
 
-inline void warn(string str)
-{
+inline void warn(string str) {
+    out("[!] " + str);
+}
+
+inline void warnln(string str) {
     outln("[!] " + str);
 }
 

@@ -39,7 +39,7 @@ void mangle_init() {
     if ((do_prefix = opts->mangle_opts->prefix)) {
         prefixes.push_back("123");
         prefixes.push_back("hello");
-        info("Loaded %i prefixes", prefixes.size());
+        infoln("Loaded %i prefixes", prefixes.size());
     }
 
     // Standard mangling
@@ -70,7 +70,7 @@ void mangle_init() {
         if ((mangle_depth = opts->mangle_opts->depth) == 0) {
             mangle_depth = mangle_rules.size();
         }
-        info("Loaded %i mangling rules (depth: %i)", mangle_rules.size(), mangle_depth);
+        infoln("Loaded %i mangling rules (depth: %i)", mangle_rules.size(), mangle_depth);
     }
 
     // Suffixes
@@ -106,7 +106,7 @@ void mangle_init() {
         sort(suffixes.begin(), suffixes.end());
         suffixes.erase(unique(suffixes.begin(), suffixes.end()), suffixes.end());
 
-        info("Loaded %i suffixes", suffixes.size());
+        infoln("Loaded %i suffixes", suffixes.size());
     }
 }
 
